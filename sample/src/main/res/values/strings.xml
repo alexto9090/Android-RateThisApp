@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">RTASample</string>
+    <string name="app_name" translatable="false">RTASample</string>
+    <string name="show_dialog_with_default_style" translatable="false">Show dialog with default style</string>
+    <string name="show_dialog_with_custom_style" translatable="false">Show dialog with custom style</string>
+    <string name="stop_rate_dialog" translatable="false">Stop rate dialog</string>
+    <string name="in_app_review_dialog" translatable="false">In-App-review dialog from Google</string>
 
 </resources>

@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 Keisuke Kobayashi
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,23 +15,28 @@
  */
 package com.kobakei.ratethisapp.sample;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.kobakei.ratethisapp.RateThisApp;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 /**
  * Sample application of RateThisApp
  */
 public class MainActivity extends AppCompatActivity {
 
+    private Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        activity = this;
 
         // Set custom criteria (optional)
         RateThisApp.init(new RateThisApp.Config(3, 5));
@@ -87,13 +92,16 @@ public class MainActivity extends AppCompatActivity {
                 RateThisApp.stopRateDialog(MainActivity.this);
             }
         });
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        Button button4 = (Button) findViewById(R.id.button4);
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RateThisApp.showRateAppInReviewDialog(MainActivity.this);
+            }
+        });
         // Monitor launch times and interval from installation
-        RateThisApp.onStart(this);
+        RateThisApp.onCreate(this);
         // Show a dialog if criteria is satisfied
         RateThisApp.showRateDialogIfNeeded(this);
     }
