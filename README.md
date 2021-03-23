@@ -22,7 +22,7 @@ and show a dialog to engage users to rate the app in Google Play.
 
 ```groovy
 dependencies {
-    compile 'io.github.kobakei:ratethisapp:x.y.z'
+    compile 'com.alexto.rateapp2021:ratethisapp:x.y.z'
 }
 ```
 
