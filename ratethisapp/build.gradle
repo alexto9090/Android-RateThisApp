@@ -37,10 +37,10 @@ dependencies {
 }
 
 publish {
-    userOrg = 'kobakei'
-    groupId = 'io.github.kobakei'
+    userOrg = 'alexto'
+    groupId = 'com.alexto.rateapp2021'
     artifactId = 'ratethisapp'
     publishVersion = "1.1.3"
     desc = 'Android library to show "Rate this app" dialog'
-    website = 'https://github.com/kobakei/Android-RateThisApp'
+    website = 'https://github.com/alexto/Android-RateThisApp'
 }
