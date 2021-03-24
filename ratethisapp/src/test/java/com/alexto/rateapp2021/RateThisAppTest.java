@@ -1,4 +1,4 @@
-package com.kobakei.ratethisapp;
+package com.alexto.rateapp2021;
 
 import android.content.Context;
 import android.content.SharedPreferences;

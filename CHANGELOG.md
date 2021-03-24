@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.1.4 (2021/03/24)
+
+- New feature
+  - Add Google In-App-Review
+- Other
+  - Update SDK version and support lib
+
 ## 1.1.3 (2017/03/23)
 
 - New feature

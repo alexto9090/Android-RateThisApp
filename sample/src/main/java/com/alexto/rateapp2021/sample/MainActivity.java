@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kobakei.ratethisapp.sample;
+package com.alexto.rateapp2021.sample;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.kobakei.ratethisapp.RateThisApp;
+import com.alexto.rateapp2021.RateThisApp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
