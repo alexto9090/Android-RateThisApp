@@ -40,7 +40,7 @@ publish {
     userOrg = 'alexto'
     groupId = 'com.alexto.rateapp2021'
     artifactId = 'ratethisapp'
-    publishVersion = "1.1.6"
+    publishVersion = "1.1.8"
     desc = 'Android library to show "Rate this app" dialog'
     website = 'https://github.com/alexto9090/Android-RateThisApp'
 }
