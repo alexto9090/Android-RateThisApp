@@ -2,7 +2,7 @@ Android-RateThisApp
 ===================
 
 [![Build Status](https://circleci.com/gh/kobakei/Android-RateThisApp.svg?style=shield)](https://circleci.com/gh/kobakei/Android-RateThisApp/tree/master)
-[![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://bintray.com/kobakei/maven/ratethisapp/_latestVersion)
+[![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://github.com/alexto9090/Android-RateThisApp/releases/tag/1.2.0)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--RateThisApp-green.svg?style=true)](https://android-arsenal.com/details/1/2893)
 
 Android-RateThisApp is an library to show "Rate this app" dialog.
@@ -22,11 +22,11 @@ and show a dialog to engage users to rate the app in Google Play.
 
 ```groovy
 dependencies {
-    compile 'com.alexto.rateapp2021:ratethisapp:x.y.z'
+    implementation 'com.github.alexto9090:Android-RateThisApp:x.y.z'
 }
 ```
 
-x.y.z is [ ![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://bintray.com/kobakei/maven/ratethisapp/_latestVersion)
+x.y.z is [ ![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://github.com/alexto9090/Android-RateThisApp/releases/tag/1.2.0)
 
 **NOTICE**: From 1.0.0, group ID has been changed from `com.kobakei` to `io.github.kobakei`.
 

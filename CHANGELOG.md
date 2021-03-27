@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.2.0 (2021/03/27)
+
+- New feature
+  - Add Google In-App-Review Update
+
 ## 1.1.4 (2021/03/24)
 
 - New feature
