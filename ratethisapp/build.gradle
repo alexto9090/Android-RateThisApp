@@ -37,7 +37,7 @@ dependencies {
 }
 
 publish {
-    userOrg = 'alexto'
+    userOrg = 'alexto9090'
     groupId = 'com.alexto.rateapp2021'
     artifactId = 'ratethisapp'
     publishVersion = "1.1.5"
