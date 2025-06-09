@@ -18,34 +18,26 @@ package com.alexto.rateapp2021;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import androidx.annotation.StringRes;
+
+import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.tasks.OnCompleteListener;
-import com.google.android.play.core.tasks.OnFailureListener;
-import com.google.android.play.core.tasks.Task;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.annotation.StringRes;
 
 /**
  * RateThisApp<br>
@@ -89,7 +81,6 @@ public class RateThisApp {
     /**
      * Set callback instance.
      * The callback will receive yes/no/later events.
-     * @param callback
      */
     public static void setCallback(Callback callback) {
         sCallback = callback;
@@ -126,7 +117,6 @@ public class RateThisApp {
     /**
      * This API is deprecated.
      * You should call onCreate instead of this API in Activity's onCreate().
-     * @param context
      */
     @Deprecated
     public static void onStart(Context context) {
@@ -138,7 +128,6 @@ public class RateThisApp {
      * @param context Context
      * @return true if shown, false otherwise.
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static boolean showRateDialogIfNeeded(final Context context) {
         if (shouldShowRateDialog()) {
             showGoogleReview(context, 0, false);
@@ -154,7 +143,6 @@ public class RateThisApp {
      * @param themeId Theme ID
      * @return true if shown, false otherwise.
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static boolean showRateDialogIfNeeded(final Context context, int themeId) {
         if (shouldShowRateDialog()) {
             showGoogleReview(context, themeId, true);
@@ -168,7 +156,6 @@ public class RateThisApp {
      * Check whether the rate dialog should be shown or not.
      * Developers may call this method directly if they want to show their own view instead of
      * dialog provided by this library.
-     * @return
      */
     public static boolean shouldShowRateDialog() {
         if (mOptOut) {
@@ -188,9 +175,7 @@ public class RateThisApp {
 
     /**
      * Show the rate dialog
-     * @param context
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void showRateDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         showRateDialog(context, builder);
@@ -198,10 +183,7 @@ public class RateThisApp {
 
     /**
      * Show the rate dialog
-     * @param context
-     * @param themeId
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void showRateDialog(final Context context, int themeId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, themeId);
         showRateDialog(context, builder);
@@ -209,52 +191,35 @@ public class RateThisApp {
 
     /**
      * Show the rate dialog
-     * @param context
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void showRateAppInReviewDialog(final Context context) {
         showGoogleReview(context, 0, false);
     }
 
     /**
      * Show the rate dialog
-     * @param context
-     * @param themeId
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void showRateAppInReviewDialog(final Context context, int themeId) {
         showGoogleReview(context, themeId, true);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void showGoogleReview(final Context context, final int themeId, final boolean isThemeNeed) {
         reviewManager = ReviewManagerFactory.create(context);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
             Task<ReviewInfo> request = reviewManager.requestReviewFlow();
-            request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
-                @Override
-                public void onComplete(@NonNull Task<ReviewInfo> task) {
-                    if (task.isSuccessful()) {
-                        // We can get the ReviewInfo object
-                        ReviewInfo reviewInfo = task.getResult();
-                        Task<Void> flow = reviewManager.launchReviewFlow((Activity) context, reviewInfo);
-                        flow.addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+            request.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // We can get the ReviewInfo object
+                    ReviewInfo reviewInfo = task.getResult();
+                    Task<Void> flow = reviewManager.launchReviewFlow((Activity) context, reviewInfo);
+                    flow.addOnCompleteListener(task1 -> {
 
-                            }
-                        });
-                        flow.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(Exception e) {
-                                setAlertDialog(context, themeId, isThemeNeed);
-                            }
-                        });
-                    } else {
-                        // There was some problem, continue regardless of the result.
-                        // show native rate app dialog on error
-                        setAlertDialog(context, themeId, isThemeNeed);
-                    }
+                    });
+                    flow.addOnFailureListener(e -> setAlertDialog(context, themeId, isThemeNeed));
+                } else {
+                    // There was some problem, continue regardless of the result.
+                    // show native rate app dialog on error
+                    setAlertDialog(context, themeId, isThemeNeed);
                 }
             });
         } else{
@@ -262,7 +227,6 @@ public class RateThisApp {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private static void setAlertDialog(final Context context, final int themeId, final boolean isThemeNeed) {
         AlertDialog.Builder builder;
         if (isThemeNeed) {
@@ -275,7 +239,6 @@ public class RateThisApp {
 
     /**
      * Stop showing the rate dialog
-     * @param context
      */
     public static void stopRateDialog(final Context context){
         setOptOut(context, true);
@@ -283,14 +246,12 @@ public class RateThisApp {
 
     /**
      * Get count number of the rate dialog launches
-     * @return
      */
     public static int getLaunchCount(final Context context){
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return pref.getInt(KEY_LAUNCH_TIMES, 0);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private static void showRateDialog(final Context context, AlertDialog.Builder builder) {
         if (sDialogRef != null && sDialogRef.get() != null) {
             // Dialog is already present
@@ -310,15 +271,12 @@ public class RateThisApp {
                 break;
             case Config.CANCEL_MODE_BACK_KEY:
                 builder.setCancelable(false);
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            dialog.cancel();
-                            return true;
-                        } else {
-                            return false;
-                        }
+                builder.setOnKeyListener((dialog, keyCode, event) -> {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        dialog.cancel();
+                        return true;
+                    } else {
+                        return false;
                     }
                 });
                 break;
@@ -326,67 +284,49 @@ public class RateThisApp {
                 builder.setCancelable(false);
                 break;
         }
-        builder.setPositiveButton(rateButtonID, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (sCallback != null) {
-                    sCallback.onYesClicked();
-                }
-                String appPackage = context.getPackageName();
-                String url = "market://details?id=" + appPackage;
-                if (!TextUtils.isEmpty(sConfig.mUrl)) {
-                    url = sConfig.mUrl;
-                }
-                try {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
-                }
-                setOptOut(context, true);
+        builder.setPositiveButton(rateButtonID, (dialog, which) -> {
+            if (sCallback != null) {
+                sCallback.onYesClicked();
             }
-        });
-        builder.setNeutralButton(cancelButtonID, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (sCallback != null) {
-                    sCallback.onCancelClicked();
-                }
-                clearSharedPreferences(context);
-                storeAskLaterDate(context);
+            String appPackage = context.getPackageName();
+            String url = "market://details?id=" + appPackage;
+            if (!TextUtils.isEmpty(sConfig.mUrl)) {
+                url = sConfig.mUrl;
             }
-        });
-        builder.setNegativeButton(thanksButtonID, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (sCallback != null) {
-                    sCallback.onNoClicked();
-                }
-                setOptOut(context, true);
+            try {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
             }
+            setOptOut(context, true);
         });
-        builder.setOnCancelListener(new OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (sCallback != null) {
-                    sCallback.onCancelClicked();
-                }
-                clearSharedPreferences(context);
-                storeAskLaterDate(context);
+        builder.setNeutralButton(cancelButtonID, (dialog, which) -> {
+            if (sCallback != null) {
+                sCallback.onCancelClicked();
             }
+            clearSharedPreferences(context);
+            storeAskLaterDate(context);
         });
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                sDialogRef.clear();
+        builder.setNegativeButton(thanksButtonID, (dialog, which) -> {
+            if (sCallback != null) {
+                sCallback.onNoClicked();
             }
+            setOptOut(context, true);
         });
+        builder.setOnCancelListener(dialog -> {
+            if (sCallback != null) {
+                sCallback.onCancelClicked();
+            }
+            clearSharedPreferences(context);
+            storeAskLaterDate(context);
+        });
+        builder.setOnDismissListener(dialog -> sDialogRef.clear());
         sDialogRef = new WeakReference<>(builder.show());
     }
 
     /**
      * Clear data in shared preferences.<br>
      * This API is called when the "Later" is pressed or canceled.
-     * @param context
      */
     private static void clearSharedPreferences(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -400,8 +340,6 @@ public class RateThisApp {
      * Set opt out flag.
      * If it is true, the rate dialog will never shown unless app data is cleared.
      * This method is called when Yes or No is pressed.
-     * @param context
-     * @param optOut
      */
     private static void setOptOut(final Context context, boolean optOut) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -414,27 +352,22 @@ public class RateThisApp {
     /**
      * Store install date.
      * Install date is retrieved from package manager if possible.
-     * @param context
-     * @param editor
      */
     private static void storeInstallDate(final Context context, SharedPreferences.Editor editor) {
         Date installDate = new Date();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            PackageManager packMan = context.getPackageManager();
-            try {
-                PackageInfo pkgInfo = packMan.getPackageInfo(context.getPackageName(), 0);
-                installDate = new Date(pkgInfo.firstInstallTime);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
+        PackageManager packMan = context.getPackageManager();
+        try {
+            PackageInfo pkgInfo = packMan.getPackageInfo(context.getPackageName(), 0);
+            installDate = new Date(pkgInfo.firstInstallTime);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         editor.putLong(KEY_INSTALL_DATE, installDate.getTime());
-        log("First install: " + installDate.toString());
+        log("First install: " + installDate);
     }
 
     /**
      * Store the date the user asked for being asked again later.
-     * @param context
      */
     private static void storeAskLaterDate(final Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -445,7 +378,6 @@ public class RateThisApp {
 
     /**
      * Print values in SharedPreferences (used for debug)
-     * @param context
      */
     private static void printStatus(final Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -457,7 +389,6 @@ public class RateThisApp {
 
     /**
      * Print log if enabled
-     * @param message
      */
     private static void log(String message) {
         if (DEBUG) {
@@ -492,8 +423,6 @@ public class RateThisApp {
 
         /**
          * Constructor.
-         * @param criteriaInstallDays
-         * @param criteriaLaunchTimes
          */
         public Config(int criteriaInstallDays, int criteriaLaunchTimes) {
             this.mCriteriaInstallDays = criteriaInstallDays;
@@ -502,7 +431,6 @@ public class RateThisApp {
 
         /**
          * Set title string ID.
-         * @param stringId
          */
         public void setTitle(@StringRes int stringId) {
             this.mTitleId = stringId;
@@ -510,7 +438,6 @@ public class RateThisApp {
 
         /**
          * Set message string ID.
-         * @param stringId
          */
         public void setMessage(@StringRes int stringId) {
             this.mMessageId = stringId;
@@ -518,7 +445,6 @@ public class RateThisApp {
 
         /**
          * Set rate now string ID.
-         * @param stringId
          */
         public void setYesButtonText(@StringRes int stringId) {
             this.mYesButtonId = stringId;
@@ -526,7 +452,6 @@ public class RateThisApp {
 
         /**
          * Set no thanks string ID.
-         * @param stringId
          */
         public void setNoButtonText(@StringRes int stringId) {
             this.mNoButtonId = stringId;
@@ -534,7 +459,6 @@ public class RateThisApp {
 
         /**
          * Set cancel string ID.
-         * @param stringId
          */
         public void setCancelButtonText(@StringRes int stringId) {
             this.mCancelButton = stringId;
@@ -542,8 +466,7 @@ public class RateThisApp {
 
         /**
          * Set navigation url when user clicks rate button.
-         * Typically, url will be https://play.google.com/store/apps/details?id=PACKAGE_NAME for Google Play.
-         * @param url
+         * Typically, url will be <a href="https://play.google.com/store/apps/details?id=PACKAGE_NAME">...</a> for Google Play.
          */
         public void setUrl(String url) {
             this.mUrl = url;
@@ -551,7 +474,6 @@ public class RateThisApp {
 
         /**
          * Set the cancel mode; namely, which ways the user can cancel the dialog.
-         * @param cancelMode
          */
         public void setCancelMode(int cancelMode) {
             this.mCancelMode = cancelMode;
