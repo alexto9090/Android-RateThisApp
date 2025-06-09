@@ -50,8 +50,8 @@ publishing {
     publications {
         release(MavenPublication) {
             groupId = 'com.github.alexto9090'
-            artifactId = 'Android-RateThisApp'
-            version = '1.4.2'
+            artifactId = 'ratethisapp'
+            version = '1.4.3'
 
             afterEvaluate {
                 from components.findByName("release")
