@@ -1,8 +1,0 @@
-jdk:
-  - openjdk17
-
-install:
-  - ./gradlew :ratethisapp:publishReleasePublicationToMavenLocal -xlint -xtest
-
-artifacts:
-  - ratethisapp/build/outputs/aar/

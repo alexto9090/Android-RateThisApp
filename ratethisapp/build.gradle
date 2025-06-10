@@ -1,5 +1,7 @@
-apply plugin: "com.android.library"
-apply plugin: 'maven-publish'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 
 android {
     namespace "com.alexto.rateapp2021"
@@ -27,16 +29,19 @@ android {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                groupId = 'com.github.alexto9090'
-                artifactId = 'ratethisapp'
-                version = '1.4.7'
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.alexto9090'
+            artifactId = 'ratethisapp'
+            version = '1.4.8'
 
-                // ✅ this must be inside afterEvaluate and use from components["release"]
-                from components.findByName("release")
+            // ✅ Use release component safely
+            from components.findByName("release")
+
+            pom {
+                name = 'Android RateThisApp'
+                description = 'rating Android apps'
             }
         }
     }

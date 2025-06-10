@@ -17,4 +17,6 @@ dependencyResolutionManagement {
         maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     }
 }
-include ':ratethisapp', ':sample'
+rootProject.name = "Android-RateThisApp"
+include ':ratethisapp'
+include ':sample'
