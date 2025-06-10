@@ -5,6 +5,7 @@ android {
     compileSdk 35
 
     defaultConfig {
+        applicationId "com.alexto.rateapp"
         minSdkVersion 21
         targetSdk 35
         versionCode 3

@@ -18,5 +18,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Android-RateThisApp"
-include ':ratethisapp'
+include(":ratethisapp")
 include ':sample'

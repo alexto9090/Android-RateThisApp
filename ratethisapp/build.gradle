@@ -27,22 +27,41 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = 'com.github.alexto9090'
-            artifactId = 'ratethisapp'
-            version = '1.4.8'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
 
-            // ✅ Use release component safely
-            from components.findByName("release")
+                groupId = 'com.github.alexto9090'
+                artifactId = 'ratethisapp'
+                version = '1.4.9'
 
-            pom {
-                name = 'Android RateThisApp'
-                description = 'rating Android apps'
+                // ✅ Fix: Avoid 'release component not found' error
+                def releaseComponent = components.findByName("release")
+                if (releaseComponent != null) {
+                    from releaseComponent
+                } else {
+                    println "❌ 'release' component not found. Make sure this is a library module."
+                }
+
+                pom {
+                    name = 'Android RateThisApp'
+                    description = 'Rating Android apps'
+                }
             }
+        }
+
+        // ✅ Optional: local test repo
+        repositories {
+            mavenLocal()
         }
     }
 }
@@ -52,6 +71,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation 'androidx.test:core:1.6.1'
+    implementation 'androidx.core:core-ktx:1.16.0'
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     testImplementation "org.robolectric:robolectric:4.14.1"
