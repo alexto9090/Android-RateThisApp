@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,12 +35,13 @@ public class RateThisAppTest {
 
     @Before
     public void setUp() throws PackageManager.NameNotFoundException {
-        Context context = RuntimeEnvironment.application.getApplicationContext();
 
-     /*   // Assume app just installed
-        RobolectricPackageManager roboPackMan = RuntimeEnvironment.getRobolectricPackageManager();
-        PackageInfo pkgInfo = roboPackMan.getPackageInfo(context.getPackageName(), 0);
-        pkgInfo.firstInstallTime = System.currentTimeMillis();*/
+        Context context = ApplicationProvider.getApplicationContext();
+        PackageManager packageManager = context.getPackageManager();
+
+        // Shadow the PackageManager to simulate packages if needed
+        PackageInfo pkgInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+        pkgInfo.firstInstallTime = System.currentTimeMillis();
     }
 
     @Test
