@@ -1,6 +1,8 @@
-# jitpack.yml
 jdk:
   - openjdk17
 
 install:
-  - ./gradlew clean assembleRelease -xlint -xtest
+  - ./gradlew :ratethisapp:assembleRelease -xlint -xtest
+
+artifacts:
+  - ratethisapp/build/outputs/aar/
