@@ -2,7 +2,7 @@ jdk:
   - openjdk17
 
 install:
-  - ./gradlew :ratethisapp:assembleRelease -xlint -xtest
+  - ./gradlew :ratethisapp:publishReleasePublicationToMavenLocal -xlint -xtest
 
 artifacts:
   - ratethisapp/build/outputs/aar/
