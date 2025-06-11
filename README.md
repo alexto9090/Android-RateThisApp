@@ -28,7 +28,7 @@ dependencies {
 
 x.y.z is [ ![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://github.com/alexto9090/Android-RateThisApp/releases/tag/1.2.0)
 
-**NOTICE**: From 1.0.0, group ID has been changed from `com.kobakei` to `io.github.kobakei`.
+**NOTICE**: From 1.3.1, group ID has been changed from `com.kobakei` to `io.github.kobakei`.
 
 ### Basic usage
 
