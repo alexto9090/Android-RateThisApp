@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdk 35
-        versionCode 7
-        versionName "1.4.5"
+        versionCode 8
+        versionName "1.4.6"
     }
 
     buildTypes {
@@ -42,7 +42,7 @@ afterEvaluate {
 
                 groupId = 'com.github.alexto9090'
                 artifactId = 'ratethisapp'
-                version = '1.4.9'
+                version = '1.5.0'
 
                 // ✅ Fix: Avoid 'release component not found' error
                 def releaseComponent = components.findByName("release")
